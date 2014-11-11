@@ -16,4 +16,4 @@ The goal of the perceptual hash is to hash in such a way that lower frequencies 
 Details on the perceptual hashing:
 If we have an image that has NxN pixels and it was transformed into FFT so it represents NxN frequencies.
 We are going to generate N prime number using sieving.
-The frequencies matrix is going to be divided into N parts (going from low-to-high freq.). Each part is associated with one of the prime numbers, all the values in that part are summed and multiplied with that prime number. The result of multiplication from each part is added together to get the final hash value.
+The frequencies matrix is going to be divided into N parts (going from low-to-high freq.). Each part is associated with one of the prime numbers (lower frequencies are associated with the larger prime numbers), all the values in that part are summed and multiplied with that prime number. The result of multiplication from each part is added together to get the final hash value.
