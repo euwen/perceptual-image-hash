@@ -8,7 +8,7 @@
 int main(){
     srand (static_cast <unsigned> (time(0)));
 
-    CPUHasher hasher;
+    HasherParallel hasher(16);
     std::vector<std::vector<float>> matrix = generateRandomMatrix(1000, 1000);
     std::cout<<hasher.Hash(matrix)<<std::endl;
     return 0;
