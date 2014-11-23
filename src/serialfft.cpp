@@ -1,30 +1,12 @@
-#include <stdlib.h>
-#include <math.h>
-#include <iostream>
-#include <time.h>
 using namespace std;
-#include "complex_ops.h"
-#include "serialutils.h"
+#include "util.hpp"
+#include "serialfft.hpp"
 
-complex*FFT1D(complex *x, unsigned int N);
-void FFT2D(complex** A, unsigned int N);
-
-int main(int argc, char** argv) {
-    if (argc!=2) {
-        cout << "usage: ./serialfft N" << std::endl;
-        exit(-1);
-    }
-
-    unsigned int N = strtol(argv[1], NULL, 10);
-    if (!is_power_of2(N)) {
-        cout << "N must be a power of 2" << std::endl;
-        exit(-1);
-    }
-
-    cout << "N: " << N << std::endl;
+void test_serial(unsigned int N) {
+    //cout << "testing for N: " << N << std::endl;
 
     //start timing
-    clock_t start = clock(), diff;
+    double start = timer();
 
     complex** A = generate_matrix(N);
 
@@ -32,18 +14,15 @@ int main(int argc, char** argv) {
     //print_matrix(A,N);
     FFT2D(A,N);
 
-    diff = clock() - start;
-    int msec = diff * 1000 / CLOCKS_PER_SEC;
-    cout << "Time taken: " << msec << " ms" << std::endl;
+    double msec = timer()-start;
+    cout << "Time taken for serial fft: " << msec << " ms" << std::endl;
 
     //cout<<"new matrix:" <<std::endl;
     //print_matrix(A,N);
-
-    return(0);
 }
 
 complex* FFT1D(complex *x, unsigned int N) {
-    complex* F = (complex*) malloc(sizeof(struct complex_t) * N);
+    complex* F = (complex*) malloc(sizeof(struct complex) * N);
     complex * d, * e, * D, * E;
     unsigned int k;
 
@@ -54,8 +33,8 @@ complex* FFT1D(complex *x, unsigned int N) {
     }
 
     //create 2 arrays for odd and even terms
-    e = (complex*) malloc(sizeof(struct complex_t) * N/2);
-    d = (complex*) malloc(sizeof(struct complex_t) * N/2);
+    e = (complex*) malloc(sizeof(struct complex) * N/2);
+    d = (complex*) malloc(sizeof(struct complex) * N/2);
 
     for(k = 0; k < N/2; k++) {
         e[k] = x[2*k];

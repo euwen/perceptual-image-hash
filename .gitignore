@@ -29,3 +29,9 @@
 
 build/
 .idea/
+
+# Cmake stuff
+Makefile
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
