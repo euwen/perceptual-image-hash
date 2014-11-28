@@ -81,19 +81,15 @@ bool is_power_of2(unsigned int N) {
 }
 
 void set_col(complex** A, complex* col, int j, unsigned int N) {
-
     for (unsigned int i = 0; i < N; ++i) {
         A[i][j] = col[i];
     }
-
 }
 
 void get_col(complex** A, complex* col, int j , unsigned int N){
-
     for (unsigned int i = 0; i < N; ++i) {
         col[i] = A[i][j];
     }
-
 }
 
 complex** generate_matrix(unsigned int N) {

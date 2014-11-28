@@ -7,26 +7,28 @@
 #include "serialfft.hpp"
 
 int main(int argc, char** argv) {
-    if (argc<2) {
-        std::cout << "usage: ./percephash N [-s]" << std::endl;
-        return(-1);
+    if (argc < 1) {
+        std::cout << "usage: ./percephash N" << std::endl;
+        return -1;
     }
-
+    srand (static_cast <unsigned> (time(0)));
     unsigned int N = strtol(argv[1], NULL, 10);
+
     if (!is_power_of2(N)) {
         std::cout << "N must be a power of 2" << std::endl;
-        return(-1);
+        return -1;
     }
-
-    if (strcmp(argv[2], "-s")==0) {
-        test_serial(N);
-        return(0);
-    }
-
-    srand (static_cast <unsigned> (time(0)));
-
-    HasherParallel hasher(16);
     std::vector<std::vector<float>> matrix = generateRandomMatrix(N, N);
-    std::cout<<hasher.Hash(matrix)<<std::endl;
+
+    test_serial(N);
+
+    HasherSerial hasherSerial;
+    hasherSerial.Hash(matrix);
+
+    std::vector<int> numThreads{2, 4, 8, 16};
+    for(auto nt = numThreads.begin(); nt != numThreads.end(); nt++){
+        HasherParallel hasher(*nt);
+        hasher.Hash(matrix);
+    }
     return 0;
 }

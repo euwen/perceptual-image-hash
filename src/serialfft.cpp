@@ -4,18 +4,17 @@ using namespace std;
 
 void test_serial(unsigned int N) {
     //cout << "testing for N: " << N << std::endl;
+    complex** A = generate_matrix(N);
 
     //start timing
     double start = timer();
-
-    complex** A = generate_matrix(N);
 
     //cout << "orig matrix: " << std::endl;
     //print_matrix(A,N);
     FFT2D(A,N);
 
-    double msec = timer()-start;
-    cout << "Time taken for serial fft: " << msec << " ms" << std::endl;
+    double sec = timer()-start;
+    cout << "SerialFFT: " << sec << " s" << std::endl;
 
     //cout<<"new matrix:" <<std::endl;
     //print_matrix(A,N);
