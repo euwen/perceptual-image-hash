@@ -16,8 +16,8 @@ std::vector<int> generatePrimes(int N);
 std::vector<std::vector<float>> generateRandomMatrix(int nRow, int nCol);
 
 struct complex {
-    float r;
-    float i;
+	float r;
+	float i;
 };
 
 complex from_polar(float r, float theta_rads);
@@ -32,5 +32,7 @@ void get_col(complex** A, complex* col, int j , unsigned int N);
 complex** generate_matrix(unsigned int N);
 int print_1d(complex* K, unsigned int N);
 void print_matrix(complex** A, unsigned int N);
+
+complex** allocateComplexMatrix(int n);
 
 #endif

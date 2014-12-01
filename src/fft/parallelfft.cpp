@@ -24,14 +24,14 @@ complex** ParallelFFT::GetAsComplexMatrix(float* A[], int n)
 	float* real = A[0];
 	float* img = A[1];
 
-	complex** result = (complex**)malloc(sizeof(complex) * (n*n));
+	complex** result = allocateComplexMatrix(n);
 
 	for (auto i = 0; i < n; i++)
 	{
-		for (auto j = 0; j < n; i++)
+		for (auto j = 0; j < n; j++)
 		{
-			result[i][j].r = real[i + j];
-			result[i][j].i = img[i + j];
+			result[i][j].r = real[n*i + j];
+			result[i][j].i = img[n*i + j];
 		}
 	}
 
@@ -43,7 +43,7 @@ void ParallelFFT::FFT2D(complex** A, int n)
 	float** clFFTInput = this->GetAsFloatArrays(A, n);
 
 	// Perform computations on GPU:
-	if (!this->PerformCalculations(clFFTInput, "forward", n, n))
+	if (this->PerformCalculations(clFFTInput, "forward", n, n) != 0)
 	{
 		std::cout << "The FFT could not be performed on the GPU, please debug :)\n";
 		return;

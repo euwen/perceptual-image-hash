@@ -10,14 +10,6 @@ bmpProcessor::~bmpProcessor()
 		free(this->GetRed());
 }
 
-complex** allocateComplexMatrix(int n)
-{
-	complex** a = (complex**)malloc(sizeof(complex*)*n);
-	for (int i = 0; i < n; i++)
-		a[i] = (complex*)malloc(sizeof(complex)*n);
-	return a;
-}
-
 bmpProcessor::bmpProcessor(char* filename)
 {
 	BMP bmpHandler;
