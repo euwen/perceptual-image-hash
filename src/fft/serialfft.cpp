@@ -1,10 +1,8 @@
-using namespace std;
 #include "util.hpp"
 #include "serialfft.hpp"
 
-void test_serial(unsigned int N) {
+void SerialFFT::test_serial(complex** A, int N) {
     //cout << "testing for N: " << N << std::endl;
-    complex** A = generate_matrix(N);
 
     //start timing
     double start = timer();
@@ -14,13 +12,13 @@ void test_serial(unsigned int N) {
     FFT2D(A,N);
 
     double sec = timer()-start;
-    cout << "SerialFFT: " << sec << " s" << std::endl;
+    std::cout << "SerialFFT: " << sec << " s" << std::endl;
 
     //cout<<"new matrix:" <<std::endl;
     //print_matrix(A,N);
 }
 
-complex* FFT1D(complex *x, unsigned int N) {
+complex* SerialFFT::FFT1D(complex *x, int N) {
     complex* F = (complex*) malloc(sizeof(struct complex) * N);
     complex * d, * e, * D, * E;
     unsigned int k;
@@ -59,7 +57,7 @@ complex* FFT1D(complex *x, unsigned int N) {
     return F;
 }
 
-void FFT2D(complex** A, unsigned int N) {
+void SerialFFT::FFT2D(complex** A, int N) {
 
     //run fft on all rows in place
     for (unsigned int i=0; i<N; i++) {

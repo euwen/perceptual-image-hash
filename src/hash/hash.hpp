@@ -6,27 +6,27 @@
 #include <memory>
 #include <iostream>
 
-#include "util.hpp"
+#include "../fft/util.hpp"
 
 class Hasher {
 public:
-    Hasher(){}
-    virtual double Hash(const std::vector<std::vector<float>> &imgFFT) = 0;
+	Hasher(){}
+	virtual double Hash(complex** imgFFT, int n) = 0;
 };
 
 class HasherSerial : public Hasher {
 public:
-    HasherSerial() {}
-    double Hash(const std::vector<std::vector<float>> &imgFFT);
+	HasherSerial() {}
+	double Hash(complex** imgFFT, int n);
 };
 
 class HasherParallel : public Hasher {
 private:
-    int _num_parallel;
+	int _num_parallel;
 
 public:
-    HasherParallel(int num_parallel) : _num_parallel(num_parallel) {}
-    double Hash(const std::vector<std::vector<float>> &imgFFT);
+	HasherParallel(int num_parallel) : _num_parallel(num_parallel) {}
+	double Hash(complex** imgFFT, int n);
 };
 
 #endif

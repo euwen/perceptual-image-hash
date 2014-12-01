@@ -1,12 +1,11 @@
 #ifndef FFT_HPP
 #define FFT_HPP
 
-#define PARALLEL_FFT
+#include "util.hpp"
 
-#ifdef PARALLEL_FFT
-#include "parallelFFt.h"
-
-void img2fftCPU(float** dest, int** img, int N);
-void img2fftGPU(float** dest, int** img, int N);
+class FFT {
+public:
+	virtual void FFT2D(complex** img, int N) = 0;
+};
 
 #endif
