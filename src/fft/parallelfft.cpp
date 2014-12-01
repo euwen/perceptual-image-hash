@@ -56,6 +56,15 @@ int ParallelFFT::PerformCalculations(float** tab, const char* direction, int siz
 {
 	int i;
 
+	int ret = -1;
+
+	// Life is great but I do not want you to include clFFT.h 
+	// if you don't plan to execute the FFT in parallel
+	// Which requires to setup an openCL SDK on your PC
+	// And is quite demanding, so, forget this code if you don't
+
+#if PARALLEL_EXEC == 1
+
 	/* OpenCL variables. */
 	cl_int err;
 	cl_platform_id platform = 0;
@@ -74,7 +83,7 @@ int ParallelFFT::PerformCalculations(float** tab, const char* direction, int siz
 	/* Size of temp buffer. */
 	size_t tmpBufferSize = 0;
 	int status = 0;
-	int ret = 0;
+	ret = 0;
 
 	/* Total size of FFT. */
 	size_t N = sizex*sizey;
@@ -208,6 +217,7 @@ int ParallelFFT::PerformCalculations(float** tab, const char* direction, int siz
 	/* Release OpenCL working objects. */
 	clReleaseCommandQueue(queue);
 	clReleaseContext(ctx);
+#endif
 
 	return ret;
 }
