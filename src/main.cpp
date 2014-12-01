@@ -8,7 +8,7 @@
 #include "fft/parallelfft.hpp"
 #include "bmp/bmpProcess.hpp"
 
-#define PARALLEL_EXEC 1
+#define PARALLEL_EXEC 0
 
 #if PARALLEL_EXEC == 1
 extern "C" {
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 		std::cout << "usage: ./percephash \"filename.bmp\".\n" << std::endl;
 		return -1;
 	}
-	srand (static_cast <unsigned> (time(0)));
+	srand(static_cast <unsigned> (time(0)));
 
 	bmpProcessor bmp(argv[1]);
 
@@ -42,15 +42,32 @@ int main(int argc, char** argv) {
 	else
 		fft = new ParallelFFT();
 
+	float t = timer();
+
 	fft->FFT2D(redMatrix, N);
+	fft->FFT2D(greenMatrix, N);
+	fft->FFT2D(blueMatrix, N);
+
+	std::cout << "It took " << timer() - t << "s to compute the fourrier matrices" <<
+		(PARALLEL_EXEC ? "on the GPU using openCL" : "serially on the cpu")
+		<< "\n";
 
 	HasherSerial hasherSerial;
-	hasherSerial.Hash(redMatrix, N);
 
-	std::vector<int> numThreads{2, 4, 8, 16};
-	for(auto nt = numThreads.begin(); nt != numThreads.end(); nt++){
+	double r = hasherSerial.Hash(redMatrix, N);
+	double g = hasherSerial.Hash(greenMatrix, N);
+	double b = hasherSerial.Hash(blueMatrix, N);
+
+	std::vector<int> numThreads{ 2, 4, 8, 16 };
+	for (auto nt = numThreads.begin(); nt != numThreads.end(); nt++){
 		HasherParallel hasher(*nt);
 		hasher.Hash(redMatrix, N);
 	}
+
+	std::cout << "For the image " << argv[1] << ", the following hash were computed: \n"
+		<< "Red Component: " << r << "\n"
+		<< "Green Component: " << g << "\n"
+		<< "Blue Component: " << b << "\n";
+
 	return 0;
 }
