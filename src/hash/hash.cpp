@@ -28,11 +28,13 @@ double HasherParallel::Hash(complex** imgFFT,int n) {
 	float counter = 0;
 	#pragma omp parallel for schedule(dynamic) shared(counter) num_threads(_num_parallel)
 	for(int i = 0; i < n; i++) {
+		float temp = 0;
 		for(int j = 0; j < n; j++){
 			int max = i > j ? i : j;
-			#pragma omp critical
-			counter += imgFFT[i][j].r * primes[max];
+			temp += imgFFT[i][j].r * primes[max];
 		}
+		#pragma omp critical
+		counter += temp;
 	}
 	double sec = timer()-start;
 	std::cout << "ParallelHash("<<_num_parallel<<"): " << sec << " s" << std::endl;
